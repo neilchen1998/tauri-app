@@ -7,6 +7,7 @@ interface DropdownOption {
 
 let greetInputEl: HTMLInputElement | null;
 let greetMsgEl: HTMLElement | null;
+let dropdownMsgEl: HTMLElement | null;
 let dropdownEl: HTMLSelectElement | null;
 
 async function greet() {
@@ -39,10 +40,21 @@ async function populateDropdown() {
   }
 }
 
+async function handleDropdownChange() {
+  if (dropdownEl && dropdownMsgEl) {
+    try {
+      dropdownMsgEl.textContent = await invoke("process_dropdown_value", { name: dropdownEl.value, });
+    } catch (error) {
+      dropdownMsgEl.textContent = "Error!";
+    }
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
 
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
+  dropdownMsgEl = document.querySelector("#selected-dropdown-msg");
   dropdownEl = document.querySelector("#my-dropdown");
 
   document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
@@ -51,5 +63,10 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   populateDropdown();
+
+  document.querySelector("#dropdown-form")?.addEventListener("change", (e) => {
+    e.preventDefault();
+    handleDropdownChange();
+  });
 
 });

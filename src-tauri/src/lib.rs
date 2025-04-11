@@ -7,7 +7,7 @@ struct DropdownOption {
 
 #[derive(serde::Deserialize)]
 struct SelectedValuePayload {
-    value: String
+    value: String,
 }
 
 #[tauri::command]
@@ -29,11 +29,10 @@ fn get_dropdown_options() -> Result<Vec<DropdownOption>, String> {
 }
 
 #[tauri::command]
-fn process_dropdown_value(payload: SelectedValuePayload) -> Result<String, String> {
-    let selected_value = payload.value;
-    println!("Selected value from frontend: {}", selected_value);
+fn process_dropdown_value(name: &str) -> String {
+    println!("Selected value from frontend: {}", name);
 
-    Ok(format!("Received: {}", selected_value))
+    format!("Received: {}", name)
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

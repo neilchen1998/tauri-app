@@ -16,7 +16,7 @@ async function save() {
     // constructs the payload
     // NOTE: all of the field names should match the struc defined in Rust
     const payload = {
-      value1: "123",
+      value1: greetInputEl.value,
       value2: "456",
     }
 
@@ -77,7 +77,7 @@ window.addEventListener("DOMContentLoaded", () => {
     greet();
   });
 
-  document.querySelector("#save-file-button-container")?.addEventListener("submit", (e) => {
+  document.querySelector("#save-file-button")?.addEventListener("click", (e) => {
     e.preventDefault();
     save();
   });

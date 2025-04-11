@@ -27,9 +27,7 @@ fn get_dropdown_options() -> Result<Vec<DropdownOption>, String> {
 fn process_dropdown_value(value: &str) -> String {
     println!("Selected value from frontend: {}", value);
 
-    let dur = std::time::Duration::from_secs(15);
-
-    std::thread::sleep(dur);
+    std::thread::sleep(std::time::Duration::from_millis(500));
 
     format!("Received: {}", value)
 }

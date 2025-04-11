@@ -10,9 +10,19 @@ let greetMsgEl: HTMLElement | null;
 let dropdownMsgEl: HTMLElement | null;
 let dropdownEl: HTMLSelectElement | null;
 
+async function save() {
+  if (greetMsgEl && greetInputEl) {
+    greetMsgEl.textContent = await invoke("save_file", {
+      payload: {
+        value1: "123",
+        value2: "456",
+      }
+    });
+  }
+}
+
 async function greet() {
   if (greetMsgEl && greetInputEl) {
-    // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
     greetMsgEl.textContent = await invoke("greet", {
       name: greetInputEl.value,
     });
@@ -60,6 +70,11 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
     e.preventDefault();
     greet();
+  });
+
+  document.querySelector("#save-file-button-container")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    save();
   });
 
   document.querySelector("#my-dropdown")?.addEventListener("focus", (e) => {

@@ -5,6 +5,12 @@ struct DropdownOption {
     label: String,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+pub struct Payload {
+    pub value1: String,
+    pub value2: String,
+}
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -32,11 +38,18 @@ fn process_dropdown_value(value: &str) -> String {
     format!("Received: {}", value)
 }
 
+#[tauri::command]
+fn save_file(payload: Payload) -> Result<String, String> {
+    println!("value 1: {}\tvalue 2: {}", payload.value1, payload.value2);
+
+    Ok(format!("File saved successfully!"))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, get_dropdown_options, process_dropdown_value])
+        .invoke_handler(tauri::generate_handler![greet, get_dropdown_options, process_dropdown_value, save_file])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

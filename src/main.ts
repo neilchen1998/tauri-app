@@ -62,7 +62,10 @@ window.addEventListener("DOMContentLoaded", () => {
     greet();
   });
 
-  populateDropdown();
+  document.querySelector("#my-dropdown")?.addEventListener("focus", (e) => {
+    e.preventDefault();
+    populateDropdown();
+  });
 
   document.querySelector("#dropdown-form")?.addEventListener("change", (e) => {
     e.preventDefault();

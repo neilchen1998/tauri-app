@@ -48,7 +48,7 @@ body {
     max-width: 80%; /* Optional: Limit the width of the main text for better readability */
 }
 
-.save-file-button-container {
+.file-system-container {
     position: fixed;
     bottom: 20px; /* Adjust as needed for vertical positioning */
     right: 20px; /* Adjust as needed for horizontal positioning */

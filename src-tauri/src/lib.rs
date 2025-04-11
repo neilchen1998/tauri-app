@@ -6,9 +6,9 @@ struct DropdownOption {
 }
 
 #[derive(serde::Serialize, serde::Deserialize)]
-pub struct Payload {
-    pub value1: String,
-    pub value2: String,
+struct Payload {
+    value1: String,
+    value2: String,
 }
 
 #[tauri::command]

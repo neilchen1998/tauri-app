@@ -12,11 +12,16 @@ let dropdownEl: HTMLSelectElement | null;
 
 async function save() {
   if (greetMsgEl && greetInputEl) {
+
+    // constructs the payload
+    // NOTE: all of the field names should match the struc defined in Rust
+    const payload = {
+      value1: "123",
+      value2: "456",
+    }
+
     greetMsgEl.textContent = await invoke("save_file", {
-      payload: {
-        value1: "123",
-        value2: "456",
-      }
+      payload: payload
     });
   }
 }

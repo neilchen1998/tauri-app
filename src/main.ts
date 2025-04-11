@@ -43,7 +43,7 @@ async function populateDropdown() {
 async function handleDropdownChange() {
   if (dropdownEl && dropdownMsgEl) {
     try {
-      dropdownMsgEl.textContent = await invoke("process_dropdown_value", { name: dropdownEl.value, });
+      dropdownMsgEl.textContent = await invoke("process_dropdown_value", { value: dropdownEl.value, });
     } catch (error) {
       dropdownMsgEl.textContent = "Error!";
     }

@@ -130,7 +130,7 @@ async function clearAllFields() {
   sessionStorage.clear();
 }
 
-async function openFile() {
+async function openHeaderFile() {
   if (filepathMsgEl) {
     try {
       const selected = await open({
@@ -231,7 +231,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById('open-file-button')?.addEventListener('click', async (e) => {
     e.preventDefault();
-    openFile();
+    openHeaderFile();
     sendTauriNotification();
   });
 });

@@ -147,7 +147,24 @@ async function openFile() {
   }
 }
 
+/**
+* Gets the current page and marks it on the sidebar
+*/
+function markCurrentPage() {
+  const currentPage = window.location.pathname.split('/').pop();
+  const sidebarLinks = document.querySelectorAll('.sidebar a');
+  sidebarLinks.forEach(link => {
+    if (link.getAttribute('href') === currentPage) {
+      link.classList.add('current-page');
+      return;
+    }
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+
+  // Mark current page on the sidebar
+  markCurrentPage();
 
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
@@ -185,19 +202,4 @@ window.addEventListener("DOMContentLoaded", () => {
     openFile();
     sendTauriNotification();
   });
-
-  // Get the current page that the user is on
-  const currentPage = window.location.pathname.split('/').pop();
-
-  // Search through all anchor elements within sidebar
-  const sidebarLinks = document.querySelectorAll('.sidebar a');
-
-  // Iterates through all of them and mark them as 'current-page'
-  // which then the css will take care of the style
-  sidebarLinks.forEach(link => {
-      if (link.getAttribute('href') === currentPage) {
-          link.classList.add('current-page');
-      }
-  });
-
 });

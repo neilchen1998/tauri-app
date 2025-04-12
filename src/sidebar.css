@@ -57,7 +57,7 @@ body {
     z-index: 1000; /* Ensure it's above other content */
 }
 
-.save-file-button, .cancel-file-button {
+.save-file-button, .clear-all-button {
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -74,11 +74,11 @@ body {
     background-color: #45a049;
 }
 
-.cancel-file-button {
+.clear-all-button {
     background-color: #e30b0b;
     color: white;
 }
 
-.cancel-file-button:hover {
+.clear-all-button:hover {
     background-color: #e30b0b;
 }

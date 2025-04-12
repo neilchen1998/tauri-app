@@ -11,13 +11,13 @@ let dropdownMsgEl: HTMLElement | null;
 let dropdownEl: HTMLSelectElement | null;
 
 async function save() {
-  if (greetMsgEl && greetInputEl) {
+  if (greetMsgEl && greetInputEl && dropdownMsgEl) {
 
     // constructs the payload
     // NOTE: all of the field names should match the struc defined in Rust
     const payload = {
       value1: greetInputEl.value,
-      value2: "456",
+      value2: dropdownMsgEl.textContent,
     }
 
     greetMsgEl.textContent = await invoke("save_file", {
@@ -65,6 +65,27 @@ async function handleDropdownChange() {
   }
 }
 
+async function clearAllFields() {
+
+  // queries all input elements and sets them to blank
+  const inputElements = document.querySelectorAll('input');
+  inputElements.forEach(function(input) {
+    input.value = '';
+  });
+
+  // queries all select elements and sets them to 0
+  const selectElements = document.querySelectorAll('select');
+  selectElements.forEach(function(select) {
+    select.selectedIndex = 0;
+  });
+
+  // queries all clearable fields (specified in the class in HTML) and sets them to blank
+  const clearableElements = document.querySelectorAll('.clearable-field');
+  clearableElements.forEach(element => {
+    element.textContent = '';
+  });
+}
+
 window.addEventListener("DOMContentLoaded", () => {
 
   greetInputEl = document.querySelector("#greet-input");
@@ -80,6 +101,11 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#save-file-button")?.addEventListener("click", (e) => {
     e.preventDefault();
     save();
+  });
+
+  document.querySelector("#clear-all-button")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    clearAllFields();
   });
 
   document.querySelector("#my-dropdown")?.addEventListener("focus", (e) => {

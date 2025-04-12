@@ -25,5 +25,9 @@
 }
 
 .sidebar a:hover {
-    background-color: #ddd;
+    background-color: #cdc6c6;
+}
+
+.current-page {
+    font-weight: bold;
 }

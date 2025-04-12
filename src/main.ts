@@ -11,32 +11,35 @@ interface DropdownOption {
   label: string;
 }
 
-async function sendTauriNotification() {
-  let permissionGranted = await isPermissionGranted();
-
-  if (!permissionGranted) {
-    const permission = await requestPermission();
-    permissionGranted = permission === 'granted';
-  }
-
-  if (permissionGranted) {
-    sendNotification({ title: 'Tauri', body: 'Tauri is awesome!' });
-  } else {
-    console.log('Notification permission denied.');
-    // Optionally inform the user that notifications are disabled.
-  }
-}
-
 let greetInputEl: HTMLInputElement | null;
 let greetMsgEl: HTMLElement | null;
 let filepathMsgEl: HTMLElement | null;
 let dropdownMsgEl: HTMLElement | null;
 let dropdownEl: HTMLSelectElement | null;
 
+async function sendTauriNotification() {
+
+  // Check if the permission to send notifications is granted
+  let permissionGranted = await isPermissionGranted();
+
+  // Request for permission is the permission is not granted
+  if (!permissionGranted) {
+    const permission = await requestPermission();
+    permissionGranted = permission === 'granted';
+  }
+
+  // Send a notification
+  if (permissionGranted) {
+    sendNotification({ title: 'Tauri', body: 'Tauri is awesome!' });
+  } else {
+    console.log('Notification permission denied.');
+  }
+}
+
 async function save() {
   if (greetMsgEl && greetInputEl && dropdownMsgEl) {
 
-    // constructs the payload
+    // Construct the payload
     // NOTE: all of the field names should match the struc defined in Rust
     const payload = {
       value1: greetInputEl.value,
@@ -50,6 +53,8 @@ async function save() {
 }
 
 async function greet() {
+
+  // Check if both elements are not null
   if (greetMsgEl && greetInputEl) {
     greetMsgEl.textContent = await invoke("greet", {
       name: greetInputEl.value,
@@ -60,10 +65,13 @@ async function greet() {
 async function populateDropdown() {
   if (dropdownEl) {
     try {
+
+      // Get the dropdown action from the backend
       const options: DropdownOption[] = await invoke("get_dropdown_options");
 
       dropdownEl.innerHTML = '';
 
+      // Loop through each option and append it to the element
       options.forEach((option) => {
         const optionEl = document.createElement("option");
 
@@ -78,6 +86,9 @@ async function populateDropdown() {
   }
 }
 
+/**
+* Gets the value that the user selects and sends it to the backend.
+*/
 async function handleDropdownChange() {
   if (dropdownEl && dropdownMsgEl) {
     try {
@@ -88,21 +99,23 @@ async function handleDropdownChange() {
   }
 }
 
+/**
+* Clears all the input arguments, selected elements, and clearable fields.
+*/
 async function clearAllFields() {
-
-  // queries all input elements and sets them to blank
+  // Query all input elements and sets them to blank
   const inputElements = document.querySelectorAll('input');
   inputElements.forEach(function(input) {
     input.value = '';
   });
 
-  // queries all select elements and sets them to 0
+  // Query all selected elements and sets them to 0
   const selectElements = document.querySelectorAll('select');
   selectElements.forEach(function(select) {
     select.selectedIndex = 0;
   });
 
-  // queries all clearable fields (specified in the class in HTML) and sets them to blank
+  // Query all clearable fields (specified in the class in HTML) and sets them to blank
   const clearableElements = document.querySelectorAll('.clearable-field');
   clearableElements.forEach(element => {
     element.textContent = '';
@@ -116,9 +129,9 @@ async function openFile() {
         multiple: false,
         directory: false,
         filters: [
+          { name: 'Header files', extensions: ['hpp', 'h'] },
           // { name: 'Text files', extensions: ['txt'] },
           // { name: 'All files', extensions: ['*'] },
-          { name: 'Header files', extensions: ['hpp', 'h'] },
         ],
         title: 'Select a header file',
       });
@@ -171,6 +184,20 @@ window.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     openFile();
     sendTauriNotification();
+  });
+
+  // Get the current page that the user is on
+  const currentPage = window.location.pathname.split('/').pop();
+
+  // Search through all anchor elements within sidebar
+  const sidebarLinks = document.querySelectorAll('.sidebar a');
+
+  // Iterates through all of them and mark them as 'current-page'
+  // which then the css will take care of the style
+  sidebarLinks.forEach(link => {
+      if (link.getAttribute('href') === currentPage) {
+          link.classList.add('current-page');
+      }
   });
 
 });

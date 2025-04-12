@@ -1,9 +1,30 @@
 import { invoke } from "@tauri-apps/api/core";
 import { open } from '@tauri-apps/plugin-dialog';
+import {
+  isPermissionGranted,
+  requestPermission,
+  sendNotification,
+} from '@tauri-apps/plugin-notification';
 
 interface DropdownOption {
   value: string;
   label: string;
+}
+
+async function sendTauriNotification() {
+  let permissionGranted = await isPermissionGranted();
+
+  if (!permissionGranted) {
+    const permission = await requestPermission();
+    permissionGranted = permission === 'granted';
+  }
+
+  if (permissionGranted) {
+    sendNotification({ title: 'Tauri', body: 'Tauri is awesome!' });
+  } else {
+    console.log('Notification permission denied.');
+    // Optionally inform the user that notifications are disabled.
+  }
 }
 
 let greetInputEl: HTMLInputElement | null;
@@ -119,7 +140,7 @@ window.addEventListener("DOMContentLoaded", () => {
   greetMsgEl = document.querySelector("#greet-msg");
   dropdownMsgEl = document.querySelector("#selected-dropdown-msg");
   dropdownEl = document.querySelector("#my-dropdown");
-  filepathMsgEl = document.getElementById('selectedFilePath');
+  filepathMsgEl = document.getElementById('selected-filepath');
 
   document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -149,6 +170,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById('open-file-button')?.addEventListener('click', async (e) => {
     e.preventDefault();
     openFile();
+    sendTauriNotification();
   });
 
 });

@@ -1,4 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
+import { open } from '@tauri-apps/plugin-dialog';
 
 interface DropdownOption {
   value: string;
@@ -7,6 +8,7 @@ interface DropdownOption {
 
 let greetInputEl: HTMLInputElement | null;
 let greetMsgEl: HTMLElement | null;
+let filepathMsgEl: HTMLElement | null;
 let dropdownMsgEl: HTMLElement | null;
 let dropdownEl: HTMLSelectElement | null;
 
@@ -86,12 +88,38 @@ async function clearAllFields() {
   });
 }
 
+async function openFile() {
+  if (filepathMsgEl) {
+    try {
+      const selected = await open({
+        multiple: false,
+        directory: false,
+        filters: [
+          // { name: 'Text files', extensions: ['txt'] },
+          // { name: 'All files', extensions: ['*'] },
+          { name: 'Header files', extensions: ['hpp', 'h'] },
+        ],
+        title: 'Select a header file',
+      });
+  
+      if (typeof selected === 'string') {
+        filepathMsgEl.textContent = `Selected file: ${selected}`;
+      } else if (selected === null) {
+        filepathMsgEl.textContent = 'No file selected.';
+      }
+    } catch (error) {
+      filepathMsgEl.textContent = `Error: ${error}`;
+    }
+  }
+}
+
 window.addEventListener("DOMContentLoaded", () => {
 
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
   dropdownMsgEl = document.querySelector("#selected-dropdown-msg");
   dropdownEl = document.querySelector("#my-dropdown");
+  filepathMsgEl = document.getElementById('selectedFilePath');
 
   document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -116,6 +144,11 @@ window.addEventListener("DOMContentLoaded", () => {
   document.querySelector("#dropdown-form")?.addEventListener("change", (e) => {
     e.preventDefault();
     handleDropdownChange();
+  });
+
+  document.getElementById('open-file-button')?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    openFile();
   });
 
 });

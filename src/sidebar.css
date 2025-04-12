@@ -1,16 +1,9 @@
-body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex; /* Enable flexbox for layout */
-    min-height: 100vh; /* Ensure the body takes at least the full viewport height */
-}
-
 .sidebar {
     background-color: #f0f0f0;
     width: 200px; /* Adjust the width as needed */
     padding: 20px;
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    overflow-y: auto; /* Enables vertical scrolling within the sidebar */
 }
 
 .sidebar ul {
@@ -33,52 +26,4 @@ body {
 
 .sidebar a:hover {
     background-color: #ddd;
-}
-
-.content {
-    flex-grow: 1; /* Allow the content to take up remaining space */
-    padding: 20px;
-    text-align: center; /* Center the content within its container */
-    display: flex; /* Enable flexbox for centering the main content */
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-}
-
-.main-text {
-    max-width: 80%; /* Optional: Limit the width of the main text for better readability */
-}
-
-.file-system-container {
-    position: fixed;
-    bottom: 20px; /* Adjust as needed for vertical positioning */
-    right: 20px; /* Adjust as needed for horizontal positioning */
-    display: flex; /* Arrange buttons horizontally */
-    gap: 10px; /* Space between buttons */
-    z-index: 1000; /* Ensure it's above other content */
-}
-
-.save-file-button, .clear-all-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.save-file-button {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.save-file-button:hover {
-    background-color: #45a049;
-}
-
-.clear-all-button {
-    background-color: #e30b0b;
-    color: white;
-}
-
-.clear-all-button:hover {
-    background-color: #e30b0b;
 }

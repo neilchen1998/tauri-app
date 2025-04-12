@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/src/styles.css">
     <link rel="stylesheet" href="/src/sidebar.css">
+    <link rel="stylesheet" href="/src/fs.css">
     <script type="module" src="/src/main.ts" defer></script>
 </head>
 <body>
@@ -32,18 +33,18 @@
 
     <div class="content">
         <div class="main-text">
+            <p class="clearable-field" id="selected-filepath"></p>
             <textarea class="clearable-field" id="header-file-preview">
-                Please select the header file
+                Please select the header file.
             </textarea>
+            <button id="open-file-button">Open File</button>
         </div>
 
         <dev class="file-system-container" id="file-system-container">
-            <button class="clear-all-button" id="clear-all-button">Cancel</button>
+            <button class="clear-all-button" id="clear-all-button">Clear All</button>
             <button class="save-file-button" id="save-file-button">Save</button>
         </dev>
 
-        <button id="open-file-button">Open File</button>
-        <p class="clearable-field" id="selected-filepath"></p>
     </div>
 </body>
 </html>

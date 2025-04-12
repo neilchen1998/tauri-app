@@ -1,0 +1,42 @@
+textarea {
+    color: white;
+    background-color: grey;
+    font-family: "Courier New", Monaco, Consolas, "Source Code Pro", monospace;
+    font-size-adjust: inherit;
+    margin: 10px 10px;
+}
+
+#selected-filepath {
+    background-color: #17c99f; /* Visual distinction */
+    border: 1px solid #ddd;
+    font-size: 0.9em;
+    color: #555;
+}
+
+#header-file-preview {
+    resize: vertical; /* Allow vertical resizing */
+    min-height: 30%;
+    max-height: 80%;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    box-sizing: border-box;
+    padding: 10px 10px;
+    min-height: 60%;
+}
+
+#open-file-button {
+    position: absolute; /* It is positioned relative to its nearest positoned ancestor */
+    bottom: 10px; /* 10 pixels relative to the bottom of its nearest ancestor */
+    right: 5px; /* 5 pixels relative to the rigth of its nearest ancestor */
+    padding: 10px 20px;
+    background-color: #5675e5;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    gap: 10px;
+}
+
+#open-file-button:hover {
+    background-color: #2049de;
+}

@@ -5,6 +5,7 @@ import {
   requestPermission,
   sendNotification,
 } from '@tauri-apps/plugin-notification';
+import { readTextFile } from '@tauri-apps/plugin-fs';
 
 interface DropdownOption {
   value: string;
@@ -16,6 +17,7 @@ let greetMsgEl: HTMLElement | null;
 let filepathMsgEl: HTMLElement | null;
 let dropdownMsgEl: HTMLElement | null;
 let dropdownEl: HTMLSelectElement | null;
+let headerFileTextAreaEl: HTMLTextAreaElement | null;
 
 async function sendTauriNotification() {
 
@@ -120,6 +122,12 @@ async function clearAllFields() {
   clearableElements.forEach(element => {
     element.textContent = '';
   });
+
+  if (headerFileTextAreaEl) {
+    headerFileTextAreaEl.value = "Please select the header file.";
+  }
+
+  sessionStorage.clear();
 }
 
 async function openFile() {
@@ -136,8 +144,24 @@ async function openFile() {
         title: 'Select a header file',
       });
   
-      if (typeof selected === 'string') {
+      if (typeof selected === 'string' && headerFileTextAreaEl) {
+
+        // Show the filepath
         filepathMsgEl.textContent = `Selected file: ${selected}`;
+
+        try {
+          // Read the content of the selected file
+          const fileContent = await readTextFile(selected);
+
+          // Cache the content in the session storage so it will presist throughout the session
+          sessionStorage.setItem('fileContent', fileContent);
+
+          // Set the value of the textarea
+          headerFileTextAreaEl.value = fileContent;
+
+        } catch (readError) {
+          headerFileTextAreaEl.value = `Error reading file: ${readError}`;
+        }
       } else if (selected === null) {
         filepathMsgEl.textContent = 'No file selected.';
       }
@@ -166,11 +190,19 @@ window.addEventListener("DOMContentLoaded", () => {
   // Mark current page on the sidebar
   markCurrentPage();
 
+  const storedContent = sessionStorage.getItem('fileContent');
+  const textareaOnCurrentPage = document.getElementById('header-file-preview') as HTMLTextAreaElement | null;
+  if (textareaOnCurrentPage && storedContent) {
+    textareaOnCurrentPage.value = storedContent;
+  }
+
   greetInputEl = document.querySelector("#greet-input");
   greetMsgEl = document.querySelector("#greet-msg");
   dropdownMsgEl = document.querySelector("#selected-dropdown-msg");
   dropdownEl = document.querySelector("#my-dropdown");
   filepathMsgEl = document.getElementById('selected-filepath');
+
+  headerFileTextAreaEl = document.getElementById('header-file-preview') as HTMLTextAreaElement | null;
 
   document.querySelector("#greet-form")?.addEventListener("submit", (e) => {
     e.preventDefault();

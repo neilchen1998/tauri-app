@@ -1,5 +1,5 @@
 import { invoke } from "@tauri-apps/api/core";
-import { open } from '@tauri-apps/plugin-dialog';
+import { open, ask, message } from '@tauri-apps/plugin-dialog';
 import {
   isPermissionGranted,
   requestPermission,
@@ -105,6 +105,20 @@ async function handleDropdownChange() {
 * Clears all the input arguments, selected elements, and clearable fields.
 */
 async function clearAllFields() {
+
+  // Prompt a warning to the user
+  const answer = await ask('This action cannot be reverted. Are you sure?', {
+    title: 'Tauri',
+    kind: 'warning',
+  });
+
+  console.log("The user presses: ${}", answer);
+
+  // Check if the user acknowledges the warning
+  if (!answer) {
+    return;
+  }
+
   // Query all input elements and sets them to blank
   const inputElements = document.querySelectorAll('input');
   inputElements.forEach(function(input) {
@@ -128,6 +142,9 @@ async function clearAllFields() {
   }
 
   sessionStorage.clear();
+
+  // Prompt a message to the user
+  await message('All changes have been cleared', { title: 'Tauri', kind: 'info' });
 }
 
 async function openHeaderFile() {

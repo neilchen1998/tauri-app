@@ -1,4 +1,3 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[derive(serde::Serialize)]
 struct DropdownOption {
     value: String,

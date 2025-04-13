@@ -202,6 +202,32 @@ function markCurrentPage() {
   });
 }
 
+async function saveTable(tableID: string) {
+
+  // Get the target element
+  const tableEl = document.getElementById(tableID);
+
+  // Check if the table element exists
+  if (!tableEl) {
+    console.error(`Can not find the table with an ID of ${tableID}`);
+    return;
+  }
+
+  // NOTE: getElementsByTagName returns a container even if there is only one element
+  const tbodyEl = tableEl.getElementsByTagName('tbody');
+  for (const body of tbodyEl) {
+    for (const trEl of body.getElementsByTagName('tr')) {
+      const tdEl = trEl.getElementsByTagName('td');
+
+      const userIDElement = tdEl[0].textContent;
+      const penultimateElement = tdEl[tdEl.length - 2].textContent;
+      const lastElement = tdEl[tdEl.length - 1].textContent;
+
+      console.log(`User ID: ${userIDElement}, penultimate: ${penultimateElement}, last: ${lastElement}`);
+    }
+  }
+}
+
 async function loadTable(url: string, tableID: string, caption: string): Promise<void> {
   
   // Get the target element
@@ -294,7 +320,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.querySelector("#save-file-button")?.addEventListener("click", (e) => {
     e.preventDefault();
-    save();
+    saveTable('page3-table');
   });
 
   document.querySelector("#clear-all-button")?.addEventListener("click", (e) => {

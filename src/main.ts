@@ -185,7 +185,106 @@ function markCurrentPage() {
   });
 }
 
+
+// async function createDataTable(dataArray: any[], targetElementID: string) {
+
+//   // Get the target element
+//   const targetEl = document.getElementById(targetElementID);
+
+//   // Check if the element exist
+//   if (!targetEl) {
+//     console.error('Target element with ID ${} not found', targetElementID);
+//     return;
+//   }
+
+//   const table = document.createElement('table');
+
+//   if (dataArray.length > 0 && typeof dataArray[0] === 'object') {
+//     const thead = document.createElement('thead');
+//     const tr = document.createElement('tr');
+
+//     for (const key in dataArray[0]) {
+//       if (Object.prototype.hasOwnProperty.call(dataArray[0], key)) {
+//         const th = document.createElement('th');
+//         th.textContent = key;
+//         tr.appendChild(th);
+//       }
+//     }
+
+//     thead.appendChild(tr);
+//     table.appendChild(thead);
+//   }
+
+//   // Create the entries
+//   const tbody = document.createElement('tbody');
+//   dataArray.forEach((rowData: any) => {
+//     const tr = document.createElement('tr');
+
+//     if (Array.isArray(rowData)) {
+//       rowData.forEach(cellData => {
+//         const td = document.createElement('td');
+//         td.textContent = String(cellData);
+//         tr.appendChild(td);
+//       })
+//     }
+
+//     tbody.appendChild(tr);
+//   });
+
+//   table.appendChild(tbody);
+
+//   // Append the table that just created to the target element
+//   targetEl.appendChild(table);
+// }
+
+async function createDataTable(
+  dataArray: any[][], // Assuming dataArray is an array of arrays
+  targetElementId: string
+): Promise<void> {
+  const targetElement = document.getElementById(targetElementId);
+  if (!targetElement) {
+    console.error(`Target element with ID '${targetElementId}' not found.`);
+    return;
+  }
+
+  const table = document.createElement('table');
+
+  // Option 1: Create a default header based on the number of columns in the first row
+  if (dataArray.length > 0 && Array.isArray(dataArray[0])) {
+    const thead = document.createElement('thead');
+    const headerRow = document.createElement('tr');
+    for (let i = 0; i < dataArray[0].length; i++) {
+      const th = document.createElement('th');
+      headerRow.appendChild(th);
+    }
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+  }
+
+  const tbody = document.createElement('tbody');
+  dataArray.forEach((rowData: any[]) => { // Assuming rowData is an array
+    const row = document.createElement('tr');
+    rowData.forEach(cellValue => {
+      const cell = document.createElement('td');
+      cell.textContent = String(cellValue);
+      row.appendChild(cell);
+    });
+    tbody.appendChild(row);
+  });
+  table.appendChild(tbody);
+
+  targetElement.appendChild(table);
+}
+
 window.addEventListener("DOMContentLoaded", () => {
+
+  const tableData1 = [
+    ['Name', 'Age', 'City'],
+    ['Alice', 30, 'New York'],
+    ['Bob', 25, 'Los Angeles'],
+    ['Charlie', 35, 'Chicago']
+  ];
+  createDataTable(tableData1, 'tableContainer');
 
   // Mark current page on the sidebar
   markCurrentPage();

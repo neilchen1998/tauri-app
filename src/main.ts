@@ -83,7 +83,7 @@ async function populateDropdown() {
       })
 
     } catch (error) {
-      console.error("Error fetching dropdown options: ", error);
+      console.error(`Error fetching dropdown options: ${error}`);
     }
   }
 }
@@ -112,7 +112,7 @@ async function clearAllFields() {
     kind: 'warning',
   });
 
-  console.log("The user presses: ${}", answer);
+  console.log(`The user presses: ${answer}`);
 
   // Check if the user acknowledges the warning
   if (!answer) {
@@ -209,7 +209,7 @@ async function loadTable(url: string, tableID: string, caption: string): Promise
 
   // Check if the table element exists
   if (!tableEl) {
-    console.error("Cannot find the table with an ID of ${}", tableID);
+    console.error(`Cannot find the table with an ID of ${tableID}`);
     return;
   }
 
@@ -224,14 +224,14 @@ async function loadTable(url: string, tableID: string, caption: string): Promise
   const response = await fetch(url);
 
   if (!response.ok) {
-    console.error("HTTP error: ${}", response.status);
+    console.error(`HTTP error: ${response.status}`);
     return;
   }
 
   const { headers, rows } = await response.json();
 
   if (!theadEl || !tbodyEl) {
-    console.error("Cannot find the table with an ID of ${} that has thead or tbody", tableID);
+    console.error(`Cannot find the table with an ID of ${tableID} that has thead or tbody`)
     return;
   }
 

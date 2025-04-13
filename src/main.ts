@@ -185,106 +185,70 @@ function markCurrentPage() {
   });
 }
 
+async function loadTable(url: string, tableID: string, caption: string): Promise<void> {
+  
+  // Get the target element
+  const tableEl = document.getElementById(tableID);
 
-// async function createDataTable(dataArray: any[], targetElementID: string) {
-
-//   // Get the target element
-//   const targetEl = document.getElementById(targetElementID);
-
-//   // Check if the element exist
-//   if (!targetEl) {
-//     console.error('Target element with ID ${} not found', targetElementID);
-//     return;
-//   }
-
-//   const table = document.createElement('table');
-
-//   if (dataArray.length > 0 && typeof dataArray[0] === 'object') {
-//     const thead = document.createElement('thead');
-//     const tr = document.createElement('tr');
-
-//     for (const key in dataArray[0]) {
-//       if (Object.prototype.hasOwnProperty.call(dataArray[0], key)) {
-//         const th = document.createElement('th');
-//         th.textContent = key;
-//         tr.appendChild(th);
-//       }
-//     }
-
-//     thead.appendChild(tr);
-//     table.appendChild(thead);
-//   }
-
-//   // Create the entries
-//   const tbody = document.createElement('tbody');
-//   dataArray.forEach((rowData: any) => {
-//     const tr = document.createElement('tr');
-
-//     if (Array.isArray(rowData)) {
-//       rowData.forEach(cellData => {
-//         const td = document.createElement('td');
-//         td.textContent = String(cellData);
-//         tr.appendChild(td);
-//       })
-//     }
-
-//     tbody.appendChild(tr);
-//   });
-
-//   table.appendChild(tbody);
-
-//   // Append the table that just created to the target element
-//   targetEl.appendChild(table);
-// }
-
-async function createDataTable(
-  dataArray: any[][], // Assuming dataArray is an array of arrays
-  targetElementId: string
-): Promise<void> {
-  const targetElement = document.getElementById(targetElementId);
-  if (!targetElement) {
-    console.error(`Target element with ID '${targetElementId}' not found.`);
+  // Check if the table element exists
+  if (!tableEl) {
+    console.error("Cannot find the table with an ID of ${}", tableID);
     return;
   }
 
-  const table = document.createElement('table');
+  // Add the caption to the table
+  const captionEl = document.createElement("caption");
+  captionEl.textContent = caption;
+  tableEl.insertBefore(captionEl, tableEl.firstChild);
 
-  // Option 1: Create a default header based on the number of columns in the first row
-  if (dataArray.length > 0 && Array.isArray(dataArray[0])) {
-    const thead = document.createElement('thead');
-    const headerRow = document.createElement('tr');
-    for (let i = 0; i < dataArray[0].length; i++) {
-      const th = document.createElement('th');
-      headerRow.appendChild(th);
-    }
-    thead.appendChild(headerRow);
-    table.appendChild(thead);
+  const theadEl = tableEl.querySelector("thead");
+  const tbodyEl = tableEl.querySelector("tbody");
+
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    console.error("HTTP error: ${}", response.status);
+    return;
   }
 
-  const tbody = document.createElement('tbody');
-  dataArray.forEach((rowData: any[]) => { // Assuming rowData is an array
-    const row = document.createElement('tr');
-    rowData.forEach(cellValue => {
-      const cell = document.createElement('td');
-      cell.textContent = String(cellValue);
-      row.appendChild(cell);
-    });
-    tbody.appendChild(row);
-  });
-  table.appendChild(tbody);
+  const { headers, rows } = await response.json();
 
-  targetElement.appendChild(table);
+  if (!theadEl || !tbodyEl) {
+    console.error("Cannot find the table with an ID of ${} that has thead or tbody", tableID);
+    return;
+  }
+
+  // Clear the table
+  theadEl.innerHTML = "<tr></tr>";
+  tbodyEl.innerHTML = "";
+
+  // Populate the headers
+  for (const headerText of headers) {
+
+    const thEl = document.createElement("th");
+
+    thEl.textContent = headerText;
+    theadEl.querySelector("tr")?.appendChild(thEl);
+  }
+
+  // Populate the rows (entries)
+  for (const row of rows) {
+    const trEl = document.createElement("tr");
+
+    for (const cellText of row) {
+      const tdEl = document.createElement("td");
+
+      tdEl.textContent = cellText;
+      trEl.appendChild(tdEl);
+    }
+
+    tbodyEl.appendChild(trEl);
+  }
 }
 
 window.addEventListener("DOMContentLoaded", () => {
 
-  const tableData1 = [
-    ['Name', 'Age', 'City'],
-    ['Alice', 30, 'New York'],
-    ['Bob', 25, 'Los Angeles'],
-    ['Charlie', 35, 'Chicago']
-  ];
-  createDataTable(tableData1, 'tableContainer');
+  loadTable("../src/data.json", "page3-table", "Employee");
 
   // Mark current page on the sidebar
   markCurrentPage();

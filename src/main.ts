@@ -259,6 +259,9 @@ async function loadTable(url: string, tableID: string, caption: string): Promise
       trEl.appendChild(tdEl);
     }
 
+    // Make the last column editable
+    trEl.lastElementChild?.setAttribute("contenteditable", "true");
+
     tbodyEl.appendChild(trEl);
   }
 }

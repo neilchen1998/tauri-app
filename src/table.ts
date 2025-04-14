@@ -148,8 +148,8 @@ export async function saveTable(tableID: string) {
 
     // Check if the table element exists
     if (!tableEl) {
-    console.error(`Can not find the table with an ID of ${tableID}`);
-    return;
+        console.error(`Can not find the table with an ID of ${tableID}`);
+        return;
     }
 
     // NOTE: getElementsByTagName returns a container even if there is only one element
@@ -159,7 +159,7 @@ export async function saveTable(tableID: string) {
         const tdEl = trEl.getElementsByTagName('td');
 
         const userIDElement = tdEl[0].textContent;
-        const penultimateElement = tdEl[tdEl.length - 2].textContent;
+        let penultimateElement = tdEl[tdEl.length - 2].textContent;
         const lastElement = tdEl[tdEl.length - 1].textContent;
 
         console.log(`User ID: ${userIDElement}, penultimate: ${penultimateElement}, last: ${lastElement}`);
@@ -172,7 +172,8 @@ export async function saveTable(tableID: string) {
         }
 
         try {
-            await invoke("updated_entry", { payload: payload, });
+            penultimateElement = await invoke("updated_entry", { payload: payload, });
+            console.log(`Updated penultimate: ${penultimateElement}`);
         } catch (error) {
             console.error(`Cannot send the updated pair.`);
         }

@@ -64,7 +64,7 @@ fn updated_entry(payload: Payload) -> Result<String, String> {
 
     println!("name 1: {}\tvalue: {}", payload.key, payload.value);
 
-    Ok(format!("New value has updated successfully!"))
+    Ok(format!("{}", payload.value))
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]

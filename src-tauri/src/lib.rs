@@ -10,6 +10,12 @@ struct Payload {
     value: String,
 }
 
+#[derive(serde::Serialize, serde::Deserialize)]
+struct Table {
+    headers: Vec<String>,
+    entries: Vec<Payload>,
+}
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
@@ -67,6 +73,34 @@ fn updated_entry(payload: Payload) -> Result<String, String> {
     Ok(format!("{}", payload.value))
 }
 
+#[tauri::command]
+fn create_table() -> Result<Table, String> {
+
+    let entries: Vec<Payload> = vec![
+        Payload {
+            key: String::from("var 1"),
+            value: String::from("1.2"),
+        },
+        Payload {
+            key: String::from("var 2"),
+            value: String::from("45"),
+        }
+    ];
+
+    let headers: Vec<String> = vec![
+        String::from("Var. Name"),
+        String::from("Old"),
+        String::from("New"),
+    ];
+
+    let table: Table = Table {
+        headers: headers,
+        entries: entries,
+    };
+
+    Ok(table)
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -79,7 +113,8 @@ pub fn run() {
             get_dropdown_options,
             process_dropdown_value,
             save_file,
-            updated_entry
+            updated_entry,
+            create_table
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

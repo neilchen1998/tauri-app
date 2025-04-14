@@ -1,5 +1,15 @@
 import { invoke } from "@tauri-apps/api/core";
 
+interface Payload {
+    key: string;
+    value: string;
+}
+  
+interface Table {
+    headers: string[];
+    entries: Payload[];
+}
+
 /**
 * Loads a readable-and-writable table from a JSON file
 * @param url - The url of the JSON file (w.r.t. the html file)
@@ -7,7 +17,9 @@ import { invoke } from "@tauri-apps/api/core";
 * @param caption - The caption of the table
 */
 export async function loadReadWriteTable(url: string, tableID: string, caption: string): Promise<void> {
-  
+
+    queryTableFromRust(tableID);
+
     // Get the target element
     const tableEl = document.getElementById(tableID);
 
@@ -179,4 +191,25 @@ export async function saveTable(tableID: string) {
         }
     }
   }
+}
+
+/**
+ * Queries the table by calling Rust
+ * @param tableID - The ID of the table
+ */
+export async function queryTableFromRust(tableID: string) {
+
+    try {
+        const table: Table = await invoke("create_table");
+
+        console.log(`Headers: ${table.headers}`);
+
+        for (const entry of table.entries) {
+
+            console.log(`${entry.key}: ${entry.value}`);
+        }
+
+    } catch (error) {
+        console.error(`Cannot get the table from Rust.`);
+    }
 }

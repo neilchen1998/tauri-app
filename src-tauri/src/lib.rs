@@ -6,8 +6,8 @@ struct DropdownOption {
 
 #[derive(serde::Serialize, serde::Deserialize)]
 struct Payload {
-    value1: String,
-    value2: String,
+    key: String,
+    value: String,
 }
 
 #[tauri::command]
@@ -54,9 +54,17 @@ fn process_dropdown_value(value: &str) -> String {
 
 #[tauri::command]
 fn save_file(payload: Payload) -> Result<String, String> {
-    println!("value 1: {}\tvalue 2: {}", payload.value1, payload.value2);
+    println!("value 1: {}\tvalue 2: {}", payload.key, payload.value);
 
     Ok(format!("File saved successfully!"))
+}
+
+#[tauri::command]
+fn updated_entry(payload: Payload) -> Result<String, String> {
+
+    println!("name 1: {}\tvalue: {}", payload.key, payload.value);
+
+    Ok(format!("New value has updated successfully!"))
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -70,7 +78,8 @@ pub fn run() {
             greet,
             get_dropdown_options,
             process_dropdown_value,
-            save_file
+            save_file,
+            updated_entry
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

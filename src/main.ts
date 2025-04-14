@@ -7,6 +7,8 @@ import {
 } from '@tauri-apps/plugin-notification';
 import { readTextFile } from '@tauri-apps/plugin-fs';
 
+import {loadReadOnlyTable, loadReadWriteTable, saveTable } from './table.ts'
+
 interface DropdownOption {
   value: string;
   label: string;
@@ -44,8 +46,8 @@ async function save() {
     // Construct the payload
     // NOTE: all of the field names should match the struc defined in Rust
     const payload = {
-      value1: greetInputEl.value,
-      value2: dropdownMsgEl.textContent,
+      key: greetInputEl.value,
+      value: dropdownMsgEl.textContent,
     }
 
     greetMsgEl.textContent = await invoke("save_file", {
@@ -202,99 +204,10 @@ function markCurrentPage() {
   });
 }
 
-async function saveTable(tableID: string) {
-
-  // Get the target element
-  const tableEl = document.getElementById(tableID);
-
-  // Check if the table element exists
-  if (!tableEl) {
-    console.error(`Can not find the table with an ID of ${tableID}`);
-    return;
-  }
-
-  // NOTE: getElementsByTagName returns a container even if there is only one element
-  const tbodyEl = tableEl.getElementsByTagName('tbody');
-  for (const body of tbodyEl) {
-    for (const trEl of body.getElementsByTagName('tr')) {
-      const tdEl = trEl.getElementsByTagName('td');
-
-      const userIDElement = tdEl[0].textContent;
-      const penultimateElement = tdEl[tdEl.length - 2].textContent;
-      const lastElement = tdEl[tdEl.length - 1].textContent;
-
-      console.log(`User ID: ${userIDElement}, penultimate: ${penultimateElement}, last: ${lastElement}`);
-    }
-  }
-}
-
-async function loadTable(url: string, tableID: string, caption: string): Promise<void> {
-  
-  // Get the target element
-  const tableEl = document.getElementById(tableID);
-
-  // Check if the table element exists
-  if (!tableEl) {
-    console.error(`Cannot find the table with an ID of ${tableID}`);
-    return;
-  }
-
-  // Add the caption to the table
-  const captionEl = document.createElement("caption");
-  captionEl.textContent = caption;
-  tableEl.insertBefore(captionEl, tableEl.firstChild);
-
-  const theadEl = tableEl.querySelector("thead");
-  const tbodyEl = tableEl.querySelector("tbody");
-
-  const response = await fetch(url);
-
-  if (!response.ok) {
-    console.error(`HTTP error: ${response.status}`);
-    return;
-  }
-
-  const { headers, rows } = await response.json();
-
-  if (!theadEl || !tbodyEl) {
-    console.error(`Cannot find the table with an ID of ${tableID} that has thead or tbody`)
-    return;
-  }
-
-  // Clear the table
-  theadEl.innerHTML = "<tr></tr>";
-  tbodyEl.innerHTML = "";
-
-  // Populate the headers
-  for (const headerText of headers) {
-
-    const thEl = document.createElement("th");
-
-    thEl.textContent = headerText;
-    theadEl.querySelector("tr")?.appendChild(thEl);
-  }
-
-  // Populate the rows (entries)
-  for (const row of rows) {
-    const trEl = document.createElement("tr");
-
-    for (const cellText of row) {
-      const tdEl = document.createElement("td");
-
-      tdEl.textContent = cellText;
-      trEl.appendChild(tdEl);
-    }
-
-    // Make the last column editable
-    trEl.lastElementChild?.setAttribute("contenteditable", "true");
-
-    tbodyEl.appendChild(trEl);
-  }
-}
-
 window.addEventListener("DOMContentLoaded", () => {
 
-  loadTable("../src/data.json", "page3-table", "Employee");
+  // loadReadOnlyTable("../src/data.json", "page3-table", "Employee");
+  loadReadWriteTable("../src/data.json", "page4-table", "Employee");
 
   // Mark current page on the sidebar
   markCurrentPage();
@@ -320,7 +233,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.querySelector("#save-file-button")?.addEventListener("click", (e) => {
     e.preventDefault();
-    saveTable('page3-table');
+    // saveTable('page3-table');
+    saveTable('page4-table');
   });
 
   document.querySelector("#clear-all-button")?.addEventListener("click", (e) => {
@@ -341,6 +255,6 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById('open-file-button')?.addEventListener('click', async (e) => {
     e.preventDefault();
     openHeaderFile();
-    sendTauriNotification();
+    // sendTauriNotification();
   });
 });

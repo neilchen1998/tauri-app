@@ -17,6 +17,24 @@ body {
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  border: 1px solid #19ba7c;
+}
+
+.welcome {
+  background-image: url('/src/assets/tauri.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  /* border: 1px solid #0a41d8; */
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  opacity: 0.95;
+}
+
+.welcome h1 {
+  padding: 20px;
+  background-color: #e8810b;
+  margin: 10px;
 }
 
 .main-text {

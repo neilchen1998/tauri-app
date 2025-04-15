@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/src/styles.css">
-    <link rel="stylesheet" href="/src/sidebar.css">
-    <link rel="stylesheet" href="/src/table.css">
+    <link rel="stylesheet" href="/src/styles/styles.css">
+    <link rel="stylesheet" href="/src/styles/sidebar.css">
     <script type="module" src="/src/main.ts" defer></script>
     <title>Side Navigation Bar</title>
 </head>
@@ -19,7 +18,6 @@
             <li><a href="page2.html">Page 2</a></li>
             <li><a href="page3.html">Page 3</a></li>
             <li><a href="page4.html">Page 4</a></li>
-            <li><a href="page1.html">Page 1</a></li>
             <li><a href="page2.html">Page 2</a></li>
             <li><a href="page1.html">Page 1</a></li>
             <li><a href="page2.html">Page 2</a></li>
@@ -34,10 +32,11 @@
 
     <div class="content">
         <div class="main-text">
-            <table class="table" id="page4-table">
-              <thead></thead>
-              <tbody></tbody>
-            </table>
+            <form class="row" id="dropdown-form">
+                <label for="myDropdown">Select an option:</label>
+                <select id="my-dropdown"></select>
+            </form>
+            <p id="selected-dropdown-msg"></p>
         </div>
     </div>
 

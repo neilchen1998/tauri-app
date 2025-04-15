@@ -41,9 +41,12 @@ export default defineConfig({
     // tell vite where to look for the html files
     rollupOptions: {
       input: {
-        main: resolve(__dirname, 'ui/index.html'),
-        page1: resolve(__dirname, 'ui/page1.html'),
-        page2: resolve(__dirname, 'ui/page2.html'),
+        main: resolve(__dirname, 'src/ui/index.html'),
+        fs: resolve(__dirname, 'src/ui/fs.html'),
+        page1: resolve(__dirname, 'src/ui/page1.html'),
+        page2: resolve(__dirname, 'src/ui/page2.html'),
+        page3: resolve(__dirname, 'src/ui/page3.html'),
+        page4: resolve(__dirname, 'src/ui/page4.html'),
       }
     }
   },
